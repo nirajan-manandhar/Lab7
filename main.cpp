@@ -5,8 +5,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <map>
 #include "Course.hpp"
 
 using namespace std;
@@ -18,7 +17,7 @@ using namespace std;
 void printSchedule(vector<Course> v)
 {
     //TODO implement your print using the copy algorithm, 2 iterators, and an ostream_iterator
-    ostream_iterator<Course> out_it (cout,"\n");
+    ostream_iterator<Course> out_it (cout);
     copy( v.begin(), v.end(), out_it);
 }
 
@@ -30,7 +29,7 @@ int main () {
     Course::dayOfWeek day;
     unsigned int sTime;
     unsigned int fTime;
-
+    multimap<Course, Course> conflicts;
     ifstream fin;
     fin.open("../courses.txt");
     vector<Course> courses;
@@ -39,7 +38,6 @@ int main () {
     while (getline(fin, line)) {
         istringstream iss(line);
         iss >> name >> cDay >> sTime >> fTime;
-        cout << "cDay " << cDay << endl;
         switch (cDay) {
             case 'M':
                 day = Course::MON;
@@ -62,6 +60,8 @@ int main () {
             case 'U':
                 day = Course::SUN;
                 break;
+            default:
+                cout << "default" << endl;
         }
 
         Course c{name, day, sTime, fTime};
@@ -81,17 +81,19 @@ int main () {
             int secondFinish = x->finish_time;
 
             if ((i->day == x->day) && (firstStart >= secondStart & firstStart <= secondFinish || firstFinish <= secondFinish & firstFinish >= secondStart)) {
-                cout << "Conflict:" << endl;
-                cout << *i << endl;
-                cout << *x << endl;
-                cout << endl;
+                conflicts.insert(pair<Course,Course>(*i,*x));
             }
 
 
         }
     }
     //TODO print out schedule conflicts
-
+    for (auto itr = conflicts.begin(); itr != conflicts.end(); ++itr)
+    {
+        cout  << "Conflict:\n" << itr->first
+              << itr->second << '\n';
+    }
+    cout << endl;
 
     //TODO print out schedule
     //Prints the entire schedule
