@@ -15,9 +15,11 @@ using namespace std;
  * print schedule - outputs course schedule to the screen
  * @param - add any new parameters you need
  */
-void printSchedule()
+void printSchedule(vector<Course> v)
 {
     //TODO implement your print using the copy algorithm, 2 iterators, and an ostream_iterator
+    ostream_iterator<Course> out_it (cout,"\n");
+    copy( v.begin(), v.end(), out_it);
 }
 
 int main () {
@@ -66,20 +68,26 @@ int main () {
         courses.push_back(c);
     }
     //TODO sort your STL container with the sort algorithm
-    cout << "Before" << endl;
-    for (auto i = courses.begin(); i != courses.end(); ++i) {
-        cout << *i << endl;
-    }
     sort(courses.begin(), courses.end());
-    cout << "After" << endl;
-    for (auto i = courses.begin(); i != courses.end(); ++i) {
-        cout << *i << endl;
-    }
+
 
     //TODO implement code to determine schedule conflicts
-    for (auto i = courses.begin(); i != courses.end(); ++i) {
-        for (auto x = courses.begin(); x != courses.end(); ++x) {
-            
+    for (auto i = courses.begin(); i != courses.end()-1; ++i) {
+        for (auto x = i+1; x != courses.end(); ++x) {
+
+            int firstStart = i->start_time;
+            int secondStart = x->start_time;
+            int firstFinish = i->finish_time;
+            int secondFinish = x->finish_time;
+
+            if ((i->day == x->day) && (firstStart >= secondStart & firstStart <= secondFinish || firstFinish <= secondFinish & firstFinish >= secondStart)) {
+                cout << "Conflict:" << endl;
+                cout << *i << endl;
+                cout << *x << endl;
+                cout << endl;
+            }
+
+
         }
     }
     //TODO print out schedule conflicts
@@ -87,9 +95,7 @@ int main () {
 
     //TODO print out schedule
     //Prints the entire schedule
-    for (auto i = courses.begin(); i != courses.end(); ++i) {
-        cout << *i << endl;
-    }
+    printSchedule(courses);
     cout << "Find the TODOs in the code and implement them." << endl;
     cout << "Add/modify any functions/code you need to complete your task." << endl;
     return 0;
