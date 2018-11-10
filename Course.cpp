@@ -2,13 +2,17 @@
 
 using namespace std;
 
+//Constructor
 Course::Course (string title, dayOfWeek day, unsigned int start_time, unsigned int finish_time) : title (title), day (day), start_time (start_time), finish_time (finish_time)
 {
 }
+
+//Copy constructor
 Course::Course (const Course & m) : title (m.title), day (m.day), start_time (m.start_time), finish_time (m.finish_time)
 {
 }
 
+//Overloaded assignment operator
 Course & Course::operator =(const Course & m) {
     title = m.title;
     day = m.day;
@@ -16,6 +20,8 @@ Course & Course::operator =(const Course & m) {
     finish_time = m.finish_time;
     return *this;
 }
+
+//Overloaded equality operator
 bool Course::operator == (const Course & m) const {
     return title == m.title &&
         day == m.day &&
@@ -23,6 +29,7 @@ bool Course::operator == (const Course & m) const {
         finish_time == m.finish_time;
 }
 
+//Overloaded less than operator (comparison)
 bool Course::operator < (const Course & m) const
 {
 
@@ -34,6 +41,7 @@ bool Course::operator < (const Course & m) const
 
 }
 
+//Overloaded insertion operator
 ostream & operator << (ostream &os, const Course & m)
 {
 
